@@ -11,3 +11,18 @@ B. Playbooks
   1. Create a playbook that creates an ansible user and sets up that user/ssh keys on all new vms.
   2. Use vagrants built in provider to test the playbook
   3. Create a hosts file with groups for each tier and use a vagrant synced folder to add it to the control machine
+
+```
+vagrant init centos/7
+vagrant up
+```
+
+### Notes
+Using vlan 10.0.15.0/24 for this course.
+Warning! Do not choose an IP that overlaps with any other IP space on your system. This can cause the network to not be reachable.
+
+
+### Helpful links
+
+https://www.vagrantup.com/downloads.html
+https://app.vagrantup.com/centos/boxes/7
