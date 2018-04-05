@@ -1,6 +1,8 @@
 ## Vagrant & Ansible playbooks
 ---
 
+### Intro
+Install vagrant and discuss providers (virtualbox or vmware)
 A. Vagrant
   1. Make one machine use  `vagrant up`, `vagrant halt`, `vagrant destroy`
   2. Use mutli-machine to create a control machine and one other
@@ -26,3 +28,7 @@ Warning! Do not choose an IP that overlaps with any other IP space on your syste
 
 https://www.vagrantup.com/downloads.html
 https://app.vagrantup.com/centos/boxes/7
+https://app.vagrantup.com/ubuntu/boxes/xenial64
+http://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+https://codebeautify.org/yaml-validator
+http://searchitoperations.techtarget.com/tip/Learn-YAML-through-a-personal-example

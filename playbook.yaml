@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create Ansible user
+      user:
+        name: ansible
+        password: $6$5CUdL.porZPtaecc$kj1EbWLr5hV/O7tHT826Huz4dJJLi0E1JvcLuT02Og6zvcf1KIoQyzESEgCSW9pSmyudHyfrKghb/VrpHactp0
+        groups:
+          - sudo
+        generate_ssh_key: yes
+    - name: fetch all public ssh keys
+      shell: cat /home/ansible/.ssh/id_rsa.pub
+      register: ssh_keys
+    - name: Set authorized key took from url
+      authorized_key:
+        user: ansible
+        state: present
+        key: "{{ ssh_keys.stdout }}"
+    - name: "Build hosts file"
+      - include_vars: hosts.yml
+      lineinfile: dest=/etc/hosts
+                  state=present
+                  dest=/etc/hosts
+                  regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}"
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      with_items: "{{ groups['all'] }}"
+
