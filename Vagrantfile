@@ -25,7 +25,6 @@ Vagrant.configure("2") do |config|
     ansible.extra_vars = {
       ansible_python_interpreter: "/usr/bin/python3",
     }
-    ansible.verbose = true
   end
 
 end

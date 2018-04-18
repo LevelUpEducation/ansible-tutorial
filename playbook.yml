@@ -30,15 +30,12 @@
         owner: ansible
         group: ansible
         mode: 0600
-    - name: fetch all public ssh keys
-      shell: cat /home/ansible/.ssh/id_rsa.pub
-      register: ssh_keys
     - name: Set authorized key took from url
       authorized_key:
         user: ansible
         state: present
-        key: "{{ ssh_keys.stdout }}"
+        key: "{{ lookup('file', 'files/id_rsa.pub') }}"
     - name: Disable strick key checking
-      - copy:
+      copy:
         content: StrictHostKeyChecking=no
         dest: /home/ansible/.ssh/config
