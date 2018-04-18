@@ -5,6 +5,7 @@
     - name: Create Ansible user
       user:
         name: ansible
+        shell: /bin/bash
         password: $6$5CUdL.porZPtaecc$kj1EbWLr5hV/O7tHT826Huz4dJJLi0E1JvcLuT02Og6zvcf1KIoQyzESEgCSW9pSmyudHyfrKghb/VrpHactp0
         groups:
           - sudo
