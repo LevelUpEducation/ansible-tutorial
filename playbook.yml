@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Create Ansible user
+      user:
+        name: ansible
+        password: $6$5CUdL.porZPtaecc$kj1EbWLr5hV/O7tHT826Huz4dJJLi0E1JvcLuT02Og6zvcf1KIoQyzESEgCSW9pSmyudHyfrKghb/VrpHactp0
+        groups:
+          - sudo
+        generate_ssh_key: no
+    - name: Creates directory
+      file:
+        path: /home/ansible/.ssh
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: 0700
+    - name: Copy key
+      copy:
+        src: files/id_rsa
+        dest: /home/ansible/.ssh/id_rsa
+        owner: ansible
+        group: ansible
+        mode: 0600
+    - name: Copy key
+      copy:
+        src: files/id_rsa.pub
+        dest: /home/ansible/.ssh/id_rsa.pub
+        owner: ansible
+        group: ansible
+        mode: 0600
+    - name: fetch all public ssh keys
+      shell: cat /home/ansible/.ssh/id_rsa.pub
+      register: ssh_keys
+    - name: Set authorized key took from url
+      authorized_key:
+        user: ansible
+        state: present
+        key: "{{ ssh_keys.stdout }}"
+    - name: Disable strick key checking
+      - copy:
+        content: StrictHostKeyChecking=no
+        dest: /home/ansible/.ssh/config
