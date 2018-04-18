@@ -11,7 +11,7 @@ A. Vagrant
   5. Install Ansible on the control machine (probably should use shell provisioner to demonstrate that vagrant capability) and show how ssh does not work be default between our VMs. Use this to segueway into the intro to ansible playbook section
 B. Playbooks
   1. Create a playbook that creates an ansible user and sets up that user/ssh keys on all new vms.
-  2. Use vagrants built in provider to test the playbook
+  2. Use vagcrants built in provider to test the playbook
   3. Create a hosts file with groups for each tier and use a vagrant synced folder to add it to the control machine
 
 ```
