@@ -2,7 +2,6 @@ require 'yaml'
 hosts = YAML.load_file('hosts.yml')
 Vagrant.configure("2") do |config|
   config.hostmanager.enabled = false
-  config.ssh.insert_key=false
 
   hosts.each do |host|
     config.vm.define host["name"] do |config|
@@ -15,16 +14,17 @@ Vagrant.configure("2") do |config|
       config.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
       end
+
+      if host["box"] == 'ubuntu/xenial64'
+        config.vm.provision "shell",  preserve_order: true,
+          inline: "sudo apt update && sudo apt install python-minimal"
+      end
+
+      config.vm.provision :hostmanager
+
+      config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "playbook.yml"
+      end
     end
   end
-
-  config.vm.provision :hostmanager
-
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
-    ansible.extra_vars = {
-      ansible_python_interpreter: "/usr/bin/python3",
-    }
-  end
-
 end
