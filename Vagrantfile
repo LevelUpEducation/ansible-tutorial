@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
 
       if host["box"] == 'ubuntu/xenial64'
         config.vm.provision "shell",  preserve_order: true,
-          inline: "sudo apt update && sudo apt install python-minimal"
+          inline: "sudo apt-get update && sudo apt install -y python-minimal"
       end
 
       config.vm.provision :hostmanager

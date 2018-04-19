@@ -2,14 +2,30 @@
 - hosts: all
   become: yes
   tasks:
+    # adds a wheel group to ubuntu machines
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
+    # Create our ansible user
     - name: Create Ansible user
       user:
         name: ansible
         shell: /bin/bash
         password: $6$5CUdL.porZPtaecc$kj1EbWLr5hV/O7tHT826Huz4dJJLi0E1JvcLuT02Og6zvcf1KIoQyzESEgCSW9pSmyudHyfrKghb/VrpHactp0
         groups:
-          - sudo
+          - wheel
         generate_ssh_key: no
+
+    # Create user's ssh dir
     - name: Creates directory
       file:
         path: /home/ansible/.ssh
@@ -17,6 +33,8 @@
         owner: ansible
         group: ansible
         mode: 0700
+
+    # Copy user's key
     - name: Copy key
       copy:
         src: files/id_rsa
@@ -24,18 +42,23 @@
         owner: ansible
         group: ansible
         mode: 0600
-    - name: Copy key
+    # Copy user's public key
+    - name: Copy public key
       copy:
         src: files/id_rsa.pub
         dest: /home/ansible/.ssh/id_rsa.pub
         owner: ansible
         group: ansible
         mode: 0600
-    - name: Set authorized key took from url
+
+    # add pub key to authorized_key file
+    - name: Set authorized key
       authorized_key:
         user: ansible
         state: present
         key: "{{ lookup('file', 'files/id_rsa.pub') }}"
+
+    # stop ssh from confirming known hosts
     - name: Disable strick key checking
       copy:
         content: StrictHostKeyChecking=no
