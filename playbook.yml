@@ -74,3 +74,10 @@
         name:
           - ansible
         state: latest
+    - name: Copy ansible config
+      copy:
+        src: files/ansible.cfg
+        dest: /home/ansible/.ansible.cfg
+        owner: ansible
+        group: ansible
+        mode: 0644

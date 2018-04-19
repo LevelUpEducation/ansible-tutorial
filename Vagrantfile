@@ -16,13 +16,6 @@ Vagrant.configure("2") do |config|
         vb.memory = "256"
       end
 
-      # Sync ansible folder
-      if host["name"] == 'ansible-control'
-        config.vm.synced_folder "ansible/", "/home/ansible/ansible",
-          owner: "ansible",
-          group: "ansible"
-      end
-
       # Run our provisioners
 
       # Ubuntu boxes need to have python 2 installed
