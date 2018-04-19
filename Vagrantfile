@@ -18,7 +18,9 @@ Vagrant.configure("2") do |config|
 
       # Sync ansible folder
       if host["name"] == 'ansible-control'
-        config.vm.synced_folder "ansible/", "/home/ansible/ansible"
+        config.vm.synced_folder "ansible/", "/home/ansible/ansible",
+          owner: "ansible",
+          group: "ansible"
       end
 
       # Run our provisioners
