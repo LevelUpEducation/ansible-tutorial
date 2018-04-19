@@ -4,6 +4,7 @@ Vagrant.configure("2") do |config|
   config.hostmanager.enabled = false
 
   hosts.each do |host|
+    # Loop over our hosts.yml file
     config.vm.define host["name"] do |config|
       config.vm.box = host["box"]
       config.vm.hostname = host["name"]
@@ -15,13 +16,19 @@ Vagrant.configure("2") do |config|
         vb.memory = "256"
       end
 
+      # Run our provisioners
+
+      # Ubuntu boxes need to have python 2 installed
       if host["box"] == 'ubuntu/xenial64'
         config.vm.provision "shell",  preserve_order: true,
           inline: "sudo apt-get update && sudo apt install -y python-minimal"
       end
 
+      # set up the /etc/hosts file for sshing between machines
+      # you can rerun on command line via `vagrant hostmangager`
       config.vm.provision :hostmanager
 
+      # run our playbook that sets up ansible user and ssh keys
       config.vm.provision "ansible" do |ansible|
         ansible.playbook = "playbook.yml"
       end
