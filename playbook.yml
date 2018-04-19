@@ -63,3 +63,14 @@
       copy:
         content: StrictHostKeyChecking=no
         dest: /home/ansible/.ssh/config
+
+- hosts: controller
+  become: yes
+  tasks:
+    - apt_repository:
+        repo: ppa:ansible/ansible
+        state: present
+    - package:
+        name:
+          - ansible
+        state: latest

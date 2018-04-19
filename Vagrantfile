@@ -16,6 +16,11 @@ Vagrant.configure("2") do |config|
         vb.memory = "256"
       end
 
+      # Sync ansible folder
+      if host["name"] == 'ansible-control'
+        config.vm.synced_folder "ansible/", "/home/ansible/ansible"
+      end
+
       # Run our provisioners
 
       # Ubuntu boxes need to have python 2 installed
@@ -31,6 +36,9 @@ Vagrant.configure("2") do |config|
       # run our playbook that sets up ansible user and ssh keys
       config.vm.provision "ansible" do |ansible|
         ansible.playbook = "playbook.yml"
+        ansible.groups = {
+          "controller" => ["ansible-control"]
+        }
       end
     end
   end
