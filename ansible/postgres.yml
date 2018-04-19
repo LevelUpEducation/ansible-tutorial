@@ -1,12 +1,18 @@
 ---
 - hosts: dbservers
   become: yes
+  gather_facts: false
   tasks:
     - name: Install epel-release
       yum:
         name: epel-release
         state: present
         update_cache: yes
+
+    - name: install the 'Development tools' package group
+      yum:
+        name: "@Development tools"
+        state: present
 
     - name: Install postgres
       package:
@@ -25,9 +31,10 @@
           - python
           - python-pip
 
-    - name: instal patroni
+    - name: upgrade setuptools
       pip:
         name:
           - setuptools
           - patroni
-        extra_args: --upgrade
+          - pip
+        state: latest

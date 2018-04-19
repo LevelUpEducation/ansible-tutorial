@@ -44,4 +44,8 @@ Vagrant.configure("2") do |config|
       end
     end
   end
+
+  config.vm.provider :virtualbox do |v|
+    v.customize ["modifyvm", :id, "--memory", 2048]
+  end
 end
