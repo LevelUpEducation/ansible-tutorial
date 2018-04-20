@@ -20,6 +20,10 @@
           - postgresql-server
           - postgresql-contrib
 
+    - name: Create database
+      command: postgresql-setup initdb
+               creates=/var/lib/pgsql/data/postgresql.conf
+
     - name: Enable PG service
       service: name=postgresql
                enabled=yes
