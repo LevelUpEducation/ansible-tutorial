@@ -3,9 +3,11 @@
   become: yes
   gather_facts: false
   tasks:
-    - name: Install epel-release
+    - name: Install epel-release & python devel
       yum:
-        name: epel-release
+        name:
+          - epel-release
+          - python-devel
         state: present
         update_cache: yes
 
