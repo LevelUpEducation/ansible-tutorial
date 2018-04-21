@@ -17,6 +17,7 @@ B. Playbooks
 ```
 vagrant init centos/7
 vagrant up
+vagrant plugin install vagrant-hostmanager
 ```
 
 ### Notes

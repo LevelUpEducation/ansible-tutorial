@@ -18,10 +18,13 @@ Vagrant.configure("2") do |config|
 
       # Run our provisioners
 
-      # Ubuntu boxes need to have python 2 installed
+      # Ubuntu boxes need to have python 2 installed and need more memory
       if host["box"] == 'ubuntu/xenial64'
         config.vm.provision "shell",  preserve_order: true,
           inline: "sudo apt-get update && sudo apt install -y python-minimal"
+          config.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--memory", 1024]
+          end
       end
 
       # set up the /etc/hosts file for sshing between machines
@@ -38,7 +41,5 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.provider :virtualbox do |v|
-  #  v.customize ["modifyvm", :id, "--memory", 500]
-  end
+
 end

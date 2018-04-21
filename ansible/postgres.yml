@@ -37,10 +37,38 @@
           - python
           - python-pip
 
-    - name: upgrade setuptools
+    - name: Install Patroni and upgrade pip/setuptools
       pip:
         name:
           - setuptools
           - patroni
           - pip
         state: latest
+
+    - name: Update Patroni configuration
+      template:
+        src: patroni.yml.j2
+        dest: /etc/patroni.yml
+        mode: 0744
+
+    - name: Create Patroni dirs
+      file:
+        path: /data/patroni
+        state: directory
+        owner: postgres
+        group: postgres
+        mode: 0700
+        recurse: yes
+
+    - name: Create Patroni service
+      template:
+        src: patroni.service.j2
+        dest: /etc/systemd/system/patroni.service
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Enable Patroni service
+      service: name=patroni
+               enabled=yes
+               state=started
