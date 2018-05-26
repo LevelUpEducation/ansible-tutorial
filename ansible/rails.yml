@@ -1,0 +1,30 @@
+---
+- hosts: [rails]
+  become: yes
+  tasks:
+    - name: install Ruby & dependencies
+      yum: pkg={{item}} state=installed
+      with_items:
+       - ruby
+       - git-core
+       - gcc-c++
+       - make
+       - automake
+       - autoconf
+       - curl-devel
+       - openssl-devel
+       - zlib-devel
+       - httpd-devel
+       - apr-devel
+       - apr-util-devel
+       - sqlite-devel
+       - ruby-devel
+       - rubygems
+    - name: Clone repo
+      git:
+        repo: https://github.com/ivaldi/brimir.git
+        dest: /var/www/brimir
+    - name: Install Bundler Gem
+      gem:
+        name: bundler
+        state: present

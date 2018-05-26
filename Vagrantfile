@@ -1,3 +1,6 @@
+# If you get host unreachable errors try running
+# vagrant hostmanager --provider=aws
+
 require "yaml"
 hosts = YAML.load_file("hosts.yml")
 
@@ -6,6 +9,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "aws"
   # Force aws to use rsync by default for faster setup
   config.vm.allowed_synced_folder_types = [:rsync]
+  # Run `vagrant rsync-auto controller` in another tab
+  config.vm.synced_folder "ansible", "/home/ansible/ansible"
 
   hosts.each do |host|
     config.vm.define host["name"] do |conf|

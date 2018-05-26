@@ -1,1 +1,9 @@
-inventory = ./hosts
+[load-blancers]
+load-blanancers
+
+[rails]
+rails-1
+rails-2
+
+[dbs]
+pg
