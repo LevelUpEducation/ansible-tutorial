@@ -16,13 +16,14 @@ Vagrant.configure("2") do |config|
     aws.aws_profile = "vagrant"
 
     # EC2 keypair
-    aws.keypair_name = "TODO"
+    aws.keypair_name = "vagrant_kp"
 
     # AWS AMI number
-    aws.ami = "TODO"
+    aws.ami = "ami-8d948ced"
     aws.instance_type = "t2.micro"
     aws.security_groups = [ "vagrant" ]
-    override.ssh.private_key_path = '~/.ssh/TODO'
+    override.ssh.username = "ubuntu"
+    override.ssh.private_key_path = '~/.ssh/vagrant_kp.pem'
   end
 end
 
