@@ -1,0 +1,25 @@
+---
+- hosts: controllers
+  become: yes
+  tasks:
+    - apt_repository:
+        repo: ppa:ansible/ansible
+        state: present
+    - package:
+        name:
+          - ansible
+        state: latest
+    - name: Copy ansible config
+      copy:
+        src: ansible-user-home/.ansible.cfg
+        dest: /home/ansible/.ansible.cfg
+        owner: ansible
+        group: ansible
+        mode: 0644
+    - name: Copy ansible hosts
+      copy:
+        src: ansible-user-home/hosts
+        dest: /home/ansible/hosts
+        owner: ansible
+        group: ansible
+        mode: 0644

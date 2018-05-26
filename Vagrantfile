@@ -30,4 +30,10 @@ Vagrant.configure("2") do |config|
     end
   end
   config.vm.provision :hostmanager
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.groups = {
+      "controllers" => ["controller"],
+    }
+  end
 end
