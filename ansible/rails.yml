@@ -40,6 +40,7 @@
       with_items:
         - postgresql-server
         - postgresql-contrib
+        - postgresql-devel
         - python-psycopg2
 
     - name: Clone repo
