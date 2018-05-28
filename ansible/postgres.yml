@@ -1,0 +1,16 @@
+---
+- hosts: [dbs]
+  tasks:
+    - name: Install postgres
+      yum: pkg={{item}} state=installed
+      with_items:
+        - postgresql-server
+        - postgresql-contrib
+
+    - name: Create database user
+      become: yes
+      #become_user: postgres
+      #vars:
+      #  ansible_ssh_pipelining: true
+      postgresql_user:
+        name: rails
