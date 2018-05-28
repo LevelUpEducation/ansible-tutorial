@@ -1,16 +1,38 @@
 ---
 - hosts: [dbs]
+  become: yes
   tasks:
     - name: Install postgres
       yum: pkg={{item}} state=installed
       with_items:
         - postgresql-server
         - postgresql-contrib
+        - python-psycopg2
+
+    - name: Initiate database
+      command: service postgresql initdb
+      args:
+        creates: /var/lib/pgsql/data/postgresql.conf
+
+    - name: Start PostgreSQL and enable at boot
+      service:
+        name: postgresql
+        enabled: yes
+        state: started
+
+
+    - name: Create Database
+      become: yes
+      become_user: postgres
+      postgresql_db:
+        name: brimir_production
 
     - name: Create database user
       become: yes
-      #become_user: postgres
+      become_user: postgres
       #vars:
       #  ansible_ssh_pipelining: true
       postgresql_user:
-        name: rails
+        name: brimir
+        password: brimir
+        db: brimir_production

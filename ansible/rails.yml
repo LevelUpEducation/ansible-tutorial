@@ -13,6 +13,14 @@
         repo: https://github.com/ivaldi/brimir.git
         dest: /var/www/brimir
 
+    - name: Check app dir ownership
+      become: yes
+      file:
+        path: /var/www/brimir
+        recurse: true
+        owner: ansible
+        group: ansible
+
     - name: Install bundler gem
       command: ~/.rbenv/shims/gem install bundler
       args:
@@ -22,4 +30,10 @@
       bundler:
         state: present
         executable: ~/.rbenv/shims/bundle
+        extra_args: --without sqlite mysql development test --deployment
         chdir: /var/www/brimir
+
+    - name: Create database.yml file
+      template:
+        src: database.yml.j2
+        dest: /var/www/brimir/config/database.yml
