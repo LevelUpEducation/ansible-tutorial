@@ -1,4 +1,11 @@
 ---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Fix hostnames
+      hostname:
+        name: "{{ inventory_hostname }}"
+        
 - hosts: controllers
   become: yes
   tasks:

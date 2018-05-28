@@ -20,7 +20,6 @@
         enabled: yes
         state: started
 
-
     - name: Create Database
       become: yes
       become_user: postgres
@@ -36,3 +35,13 @@
         name: brimir
         password: brimir
         db: brimir_production
+
+    - name: Allow Remote Connnections
+      lineinfile:
+        path: /var/lib/pgsql/postgresql.conf
+        line: "listen_addresses = '*'"
+
+    - name: Create pg_hba file
+      template:
+        src: pg_hba.conf.j2
+        dest: /var/lib/pgsql/pg_hba.conf

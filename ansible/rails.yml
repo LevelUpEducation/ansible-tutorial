@@ -1,5 +1,20 @@
 ---
 - hosts: [rails]
+  vars:
+    app_env: production
+    app_secret: 82d58d3dfb91238b495a311eb8539edf5064784f1d58994679db8363ec241c745bef0b446bfe44d66cbf91a2f4e497d8f6b1ef1656e3f405b0d263a9617ac75e
+    app_base_dir: /var/www
+    app_www_root: "{{app_base_dir}}/brimir"
+    devise_secret: 4cfc6beaabf7c85023ae8b3ebab0e24c508aeb1955ca53d1db2349db72170b8123c0584ca3e55d1dacca7a3e7de32885b5503c0aaf47e5b20a8117a7bc3fa981
+
+    app_env_vars:
+      - {name: SECRET_KEY_BASE, value: "{{app_secret}}" }
+      - {name: RAILS_ENV, value: "{{app_env}}" }
+
+    app_db_host: pg
+    app_db_user: brimir
+    app_db_password: brimir
+    app_db_name: brimir_production
   tasks:
     - name: Install git
       become: yes
@@ -7,11 +22,32 @@
         name: git-core
         state: present
 
+    - name: Install epel
+      become: yes
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install nodejs
+      become: yes
+      yum:
+        name: nodejs
+        state: present
+
+    - name: Install postgres
+      yum: pkg={{item}} state=installed
+      become: yes
+      with_items:
+        - postgresql-server
+        - postgresql-contrib
+        - python-psycopg2
+
     - name: Clone repo
       become: yes
       git:
         repo: https://github.com/ivaldi/brimir.git
         dest: /var/www/brimir
+        update: no
 
     - name: Check app dir ownership
       become: yes
@@ -35,5 +71,15 @@
 
     - name: Create database.yml file
       template:
-        src: database.yml.j2
+        src: rails/database.yml.j2
         dest: /var/www/brimir/config/database.yml
+
+    - name: Create devise.rb file
+      template:
+        src: rails/devise.rb.j2
+        dest: /var/www/brimir/config/initializers/devise.rb
+
+    - name: Create secrets.yml file
+      template:
+        src: rails/secrets.yml.j2
+        dest: /var/www/brimir/config/secrets.yml
